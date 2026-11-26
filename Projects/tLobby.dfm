@@ -10,12 +10,16 @@ object LobbyForm: TLobbyForm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
-  PixelsPerInch = 96
   TextHeight = 13
+  object lblUpdateStatus: TLabel
+    Left = 152
+    Top = 303
+    Width = 3
+    Height = 13
+  end
   object btnDochazka: TButton
     Left = 96
-    Top = 56
+    Top = 8
     Width = 145
     Height = 57
     Caption = 'Doch'#225'zka'
@@ -24,7 +28,7 @@ object LobbyForm: TLobbyForm
   end
   object btnHerbareni: TButton
     Left = 96
-    Top = 144
+    Top = 88
     Width = 145
     Height = 57
     Caption = 'Herba'#345'en'#237
@@ -33,7 +37,7 @@ object LobbyForm: TLobbyForm
   end
   object btnEventy: TButton
     Left = 96
-    Top = 240
+    Top = 168
     Width = 145
     Height = 57
     Caption = 'Eventy'
@@ -54,5 +58,39 @@ object LobbyForm: TLobbyForm
     Font.Style = []
     ParentFont = False
     TabOrder = 3
+  end
+  object btnAktualizovat: TButton
+    Left = 272
+    Top = 312
+    Width = 75
+    Height = 25
+    Caption = 'Aktualizovat'
+    TabOrder = 4
+    OnClick = btnAktualizovatClick
+  end
+  object pbUpdate: TProgressBar
+    Left = 96
+    Top = 320
+    Width = 145
+    Height = 17
+    TabOrder = 5
+  end
+  object btnHelper: TButton
+    Left = 96
+    Top = 248
+    Width = 73
+    Height = 57
+    Caption = 'Helper'
+    TabOrder = 6
+    OnClick = btnHelperClick
+  end
+  object btnOsvicenstvi: TButton
+    Left = 161
+    Top = 248
+    Width = 80
+    Height = 57
+    Caption = 'Osvicenstvi'
+    TabOrder = 7
+    OnClick = btnOsvicenstviClick
   end
 end

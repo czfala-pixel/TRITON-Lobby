@@ -1,12 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.141,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.dfm=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tLobby.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.512,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Lobby.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.141,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tLobby.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.260,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\LobbyUpdater.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.843,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.779,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.214,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.141,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tLobby.pas=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.393,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tDochazka.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.907,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.109,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
-    <Transaction>2026.11.22 02:01:50.393,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tDochazka.pas</Transaction>
-    <Transaction>2026.11.22 02:01:50.469,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tEventy.pas</Transaction>
-    <Transaction>2026.11.22 02:01:50.560,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tHerbareni.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.512,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Lobby.dproj=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.560,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tHerbareni.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.141,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tLobby.dfm=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.104,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\LobbyUpdater.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.469,=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\tEventy.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.843,=C:\Users\czfal\Documents\GitHub\TRITON Lobby\Release\update.json</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.169,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\LobbyUpdateHelper.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.605,C:\Users\czfal\Documents\Embarcadero\Studio\Projects\LobbyUpdateHelper.pas=C:\Users\czfal\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
   </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="..\..\..\..\Documents"/>
+    <File Path="..\..\..\GitHub"/>
+    <File Path="..\..\..\GitHub\TRITON Lobby"/>
+    <File Path="..\..\..\GitHub\TRITON Lobby\Release"/>
+    <File Path="..\..\..\GitHub\TRITON Lobby\Release\update.json"/>
+    <File Path="tDochazka.pas"/>
+    <File Path="tDochazka.dfm"/>
+    <File Path="tEventy.pas"/>
+    <File Path="tEventy.dfm"/>
+    <File Path="tHerbareni.pas"/>
+    <File Path="tHerbareni.dfm"/>
+    <File Path="tLobby.pas"/>
+    <File Path="tLobby.dfm"/>
+  </ProjectSortOrder>
 </BorlandProject>

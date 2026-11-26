@@ -10,10 +10,8 @@ object Form1: TForm1
   Font.Height = -12
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 14
   object PanelTop: TPanel
     Left = 0
@@ -23,7 +21,6 @@ object Form1: TForm1
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 960
     DesignSize = (
       999
       50)
@@ -103,7 +100,6 @@ object Form1: TForm1
       Caption = 'Kopirovat pro Discord'
       TabOrder = 5
       OnClick = btnDiscordClick
-      ExplicitLeft = 800
     end
   end
   object PanelBottom: TPanel
@@ -114,8 +110,6 @@ object Form1: TForm1
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 510
-    ExplicitWidth = 960
     object lblStav: TLabel
       Left = 450
       Top = 17
@@ -170,8 +164,6 @@ object Form1: TForm1
     TabOrder = 2
     OnDrawCell = GridDochazkaDrawCell
     OnMouseDown = GridDochazkaMouseDown
-    ExplicitWidth = 960
-    ExplicitHeight = 460
   end
   object TimerSync: TTimer
     Interval = 5000
