@@ -18,28 +18,28 @@ object LobbyForm: TLobbyForm
     Height = 13
   end
   object btnDochazka: TButton
-    Left = 96
-    Top = 8
-    Width = 145
-    Height = 57
+    Left = 24
+    Top = 17
+    Width = 121
+    Height = 41
     Caption = 'Doch'#225'zka'
     TabOrder = 0
     OnClick = btnDochazkaClick
   end
   object btnHerbareni: TButton
-    Left = 96
-    Top = 88
-    Width = 145
-    Height = 57
+    Left = 200
+    Top = 17
+    Width = 121
+    Height = 41
     Caption = 'Herba'#345'en'#237
     TabOrder = 1
     OnClick = btnHerbareniClick
   end
   object btnEventy: TButton
-    Left = 96
-    Top = 168
-    Width = 145
-    Height = 57
+    Left = 24
+    Top = 88
+    Width = 121
+    Height = 41
     Caption = 'Eventy'
     TabOrder = 2
     OnClick = btnEventyClick
@@ -60,7 +60,7 @@ object LobbyForm: TLobbyForm
     TabOrder = 3
   end
   object btnAktualizovat: TButton
-    Left = 272
+    Left = 0
     Top = 312
     Width = 75
     Height = 25
@@ -76,21 +76,30 @@ object LobbyForm: TLobbyForm
     TabOrder = 5
   end
   object btnHelper: TButton
-    Left = 96
-    Top = 248
-    Width = 73
-    Height = 57
+    Left = 24
+    Top = 160
+    Width = 121
+    Height = 41
     Caption = 'Helper'
     TabOrder = 6
     OnClick = btnHelperClick
   end
   object btnOsvicenstvi: TButton
-    Left = 161
-    Top = 248
-    Width = 80
-    Height = 57
-    Caption = 'Osvicenstvi'
+    Left = 200
+    Top = 160
+    Width = 121
+    Height = 41
+    Caption = 'Osv'#237'censtv'#237
     TabOrder = 7
     OnClick = btnOsvicenstviClick
+  end
+  object btnVylepsovani: TButton
+    Left = 200
+    Top = 88
+    Width = 121
+    Height = 41
+    Caption = 'Kalkul'#225'tor uppek'
+    TabOrder = 8
+    OnClick = btnVylepsovaniClick
   end
 end

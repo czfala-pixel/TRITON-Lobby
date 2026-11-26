@@ -1,0 +1,415 @@
+unit tVylepsovani;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, System.Generics.Collections, Vcl.Graphics, Vcl.Controls,
+  Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Vcl.ImgList, Vcl.Clipbrd, System.ImageList;
+
+type
+  TSurovinaItem = record
+    Nazev: string;
+    PocetNaKrok: Int64;
+  end;
+
+  TUrovenVylepseni = record
+    StupenPoVylepseni: Integer; // 1 = z +0 na +1, ..., 9 = z +8 na +9
+    Suroviny: TArray<TSurovinaItem>;
+  end;
+
+  TTypPredmetu = record
+    Nazev: string;
+    MinStupen: Integer;
+    MaxStupen: Integer;
+    Urovne: TArray<TUrovenVylepseni>;
+  end;
+
+  TfrmVylepsovani = class(TForm)
+    pnlNastaveni: TPanel;
+    lblTyp: TLabel;
+    cmbTypPredmetu: TComboBox;
+    lblOd: TLabel;
+    cmbStupenOd: TComboBox;
+    lblDo: TLabel;
+    cmbStupenDo: TComboBox;
+    btnVypocitat: TButton;
+    btnKopirovat: TButton;
+    lvVysledek: TListView;
+    ilSuroviny: TImageList;
+    procedure FormCreate(Sender: TObject);
+    procedure btnVypocitatClick(Sender: TObject);
+    procedure btnKopirovatClick(Sender: TObject);
+    procedure ZmenaParametru(Sender: TObject);
+  private
+    FData: TArray<TTypPredmetu>;
+    procedure NaplnRecepty;
+    procedure NaplnRozsahStupnu;
+    procedure VypocitejAZobraz;
+    function IndexIkonkyProSurovinu(const ANazev: string): Integer;
+    function FormatujMnozstvi(const ANazev: string; AHodnota: Int64): string;
+  public
+  end;
+
+var
+  frmVylepsovani: TfrmVylepsovani;
+
+implementation
+
+{$R *.dfm}
+
+function Surovina(const ANazev: string; APocet: Int64): TSurovinaItem;
+begin
+  Result.Nazev := ANazev;
+  Result.PocetNaKrok := APocet;
+end;
+
+function Uroven(AStupenPo: Integer; const ASuroviny: array of TSurovinaItem): TUrovenVylepseni;
+var
+  i: Integer;
+begin
+  Result.StupenPoVylepseni := AStupenPo;
+  SetLength(Result.Suroviny, Length(ASuroviny));
+  for i := 0 to High(ASuroviny) do
+    Result.Suroviny[i] := ASuroviny[i];
+end;
+
+function VytvorUrovneDoplnku: TArray<TUrovenVylepseni>;
+begin
+  Result := [
+    Uroven(1, [
+      Surovina('Modrý krystal katakomb', 50),
+      Surovina('Oranžový krystal katakomb', 50),
+      Surovina('Zelený krystal katakomb', 50),
+      Surovina('Kámen mága smrti', 40),
+      Surovina('Kámen zuøivosti', 40),
+      Surovina('Yang', 600000000)
+    ]),
+    Uroven(2, [
+      Surovina('Modrý krystal katakomb', 60),
+      Surovina('Oranžový krystal katakomb', 60),
+      Surovina('Zelený krystal katakomb', 60),
+      Surovina('Kámen mága smrti', 50),
+      Surovina('Kámen zuøivosti', 50),
+      Surovina('Yang', 675000000)
+    ]),
+    Uroven(3, [
+      Surovina('Modrý krystal katakomb', 70),
+      Surovina('Oranžový krystal katakomb', 70),
+      Surovina('Zelený krystal katakomb', 70),
+      Surovina('Kámen mága smrti', 60),
+      Surovina('Kámen zuøivosti', 60),
+      Surovina('Yang', 750000000)
+    ]),
+    Uroven(4, [
+      Surovina('Modrý krystal katakomb', 80),
+      Surovina('Oranžový krystal katakomb', 80),
+      Surovina('Zelený krystal katakomb', 80),
+      Surovina('Kámen mága smrti', 70),
+      Surovina('Kámen zuøivosti', 70),
+      Surovina('Yang', 825000000)
+    ]),
+    Uroven(5, [
+      Surovina('Modrý krystal katakomb', 90),
+      Surovina('Oranžový krystal katakomb', 90),
+      Surovina('Zelený krystal katakomb', 90),
+      Surovina('Kámen mága smrti', 80),
+      Surovina('Kámen zuøivosti', 80),
+      Surovina('Yang', 900000000)
+    ]),
+    Uroven(6, [
+      Surovina('Kámen smrti', 200),
+      Surovina('Kámen pohlcení', 10),
+      Surovina('Kámen utrpení', 1),
+      Surovina('Kámen marnosti', 20),
+      Surovina('Yang', 975000000)
+    ]),
+    Uroven(7, [
+      Surovina('Kámen smrti', 400),
+      Surovina('Kámen pohlcení', 20),
+      Surovina('Kámen utrpení', 2),
+      Surovina('Kámen marnosti', 25),
+      Surovina('Yang', 1050000000)
+    ]),
+    Uroven(8, [
+      Surovina('Kámen smrti', 600),
+      Surovina('Kámen pohlcení', 30),
+      Surovina('Kámen utrpení', 3),
+      Surovina('Kámen marnosti', 30),
+      Surovina('Yang', 1125000000)
+    ]),
+    Uroven(9, [
+      Surovina('Kámen smrti', 800),
+      Surovina('Kámen pohlcení', 40),
+      Surovina('Kámen utrpení', 4),
+      Surovina('Kámen marnosti', 35),
+      Surovina('Yang', 1200000000)
+    ])
+  ];
+end;
+
+procedure TfrmVylepsovani.FormCreate(Sender: TObject);
+var
+  i: Integer;
+  Col: TListColumn;
+begin
+  lvVysledek.ViewStyle := vsReport;
+  lvVysledek.RowSelect := True;
+  lvVysledek.GridLines := True;
+  lvVysledek.ReadOnly := True;
+  lvVysledek.SmallImages := ilSuroviny;
+
+  lvVysledek.Columns.Clear;
+  Col := lvVysledek.Columns.Add;
+  Col.Caption := 'Surovina';
+  Col.Width := 320;
+
+  Col := lvVysledek.Columns.Add;
+  Col.Caption := 'Potøeba';
+  Col.Width := 180;
+  Col.Alignment := taRightJustify;
+
+  NaplnRecepty;
+
+  cmbTypPredmetu.Items.Clear;
+  for i := 0 to High(FData) do
+    cmbTypPredmetu.Items.Add(FData[i].Nazev);
+
+  if cmbTypPredmetu.Items.Count > 0 then
+    cmbTypPredmetu.ItemIndex := 0;
+
+  NaplnRozsahStupnu;
+  VypocitejAZobraz;
+end;
+
+procedure TfrmVylepsovani.NaplnRecepty;
+const
+  Predmety: array[0..5] of string = (
+    'Helma', 'Štít', 'Náušnice', 'Náramek', 'Náhrdelník', 'Boty'
+  );
+var
+  i: Integer;
+  UrovneSpolecne: TArray<TUrovenVylepseni>;
+begin
+  UrovneSpolecne := VytvorUrovneDoplnku;
+  SetLength(FData, Length(Predmety));
+
+  for i := 0 to High(Predmety) do
+  begin
+    FData[i].Nazev := Predmety[i];
+    FData[i].MinStupen := 0;
+    FData[i].MaxStupen := 9;
+    FData[i].Urovne := UrovneSpolecne;
+  end;
+end;
+
+procedure TfrmVylepsovani.NaplnRozsahStupnu;
+var
+  Idx, Stupen, PredchoziOd, PredchoziDo: Integer;
+begin
+  Idx := cmbTypPredmetu.ItemIndex;
+  if (Idx < 0) or (Idx > High(FData)) then
+    Exit;
+
+  PredchoziOd := FData[Idx].MinStupen;
+  if cmbStupenOd.ItemIndex >= 0 then
+    PredchoziOd := Integer(cmbStupenOd.Items.Objects[cmbStupenOd.ItemIndex]);
+
+  PredchoziDo := FData[Idx].MaxStupen;
+  if cmbStupenDo.ItemIndex >= 0 then
+    PredchoziDo := Integer(cmbStupenDo.Items.Objects[cmbStupenDo.ItemIndex]);
+
+  cmbStupenOd.Items.BeginUpdate;
+  try
+    cmbStupenOd.Items.Clear;
+    for Stupen := FData[Idx].MinStupen to FData[Idx].MaxStupen - 1 do
+      cmbStupenOd.Items.AddObject(Format('+%d', [Stupen]), TObject(Stupen));
+  finally
+    cmbStupenOd.Items.EndUpdate;
+  end;
+
+  cmbStupenDo.Items.BeginUpdate;
+  try
+    cmbStupenDo.Items.Clear;
+    for Stupen := FData[Idx].MinStupen + 1 to FData[Idx].MaxStupen do
+      cmbStupenDo.Items.AddObject(Format('+%d', [Stupen]), TObject(Stupen));
+  finally
+    cmbStupenDo.Items.EndUpdate;
+  end;
+
+  if cmbStupenOd.Items.Count > 0 then
+  begin
+    Idx := cmbStupenOd.Items.IndexOfObject(TObject(PredchoziOd));
+    if Idx >= 0 then
+      cmbStupenOd.ItemIndex := Idx
+    else
+      cmbStupenOd.ItemIndex := 0;
+  end;
+
+  if cmbStupenDo.Items.Count > 0 then
+  begin
+    Idx := cmbStupenDo.Items.IndexOfObject(TObject(PredchoziDo));
+    if Idx >= 0 then
+      cmbStupenDo.ItemIndex := Idx
+    else
+      cmbStupenDo.ItemIndex := cmbStupenDo.Items.Count - 1;
+  end;
+end;
+
+function TfrmVylepsovani.IndexIkonkyProSurovinu(const ANazev: string): Integer;
+begin
+  if SameText(ANazev, 'Modrý krystal katakomb') then
+    Result := 0
+  else if SameText(ANazev, 'Oranžový krystal katakomb') then
+    Result := 1
+  else if SameText(ANazev, 'Zelený krystal katakomb') then
+    Result := 2
+  else if SameText(ANazev, 'Kámen mága smrti') then
+    Result := 3
+  else if SameText(ANazev, 'Kámen zuøivosti') then
+    Result := 4
+  else if SameText(ANazev, 'Kámen smrti') then
+    Result := 5
+  else if SameText(ANazev, 'Kámen pohlcení') then
+    Result := 6
+  else if SameText(ANazev, 'Kámen utrpení') then
+    Result := 7
+  else if SameText(ANazev, 'Kámen marnosti') then
+    Result := 8
+  else if SameText(ANazev, 'Yang') then
+    Result := 9
+  else
+    Result := -1;
+end;
+
+function TfrmVylepsovani.FormatujMnozstvi(const ANazev: string; AHodnota: Int64): string;
+begin
+  if SameText(ANazev, 'Yang') then
+  begin
+    if AHodnota >= 1000000000 then
+      Result := Format('%.3f B (%s)', [AHodnota / 1000000000.0, FormatFloat('#,##0', AHodnota)])
+    else
+      Result := Format('%.0f KkK (%s)', [AHodnota / 1000000.0, FormatFloat('#,##0', AHodnota)]);
+  end
+  else
+    Result := FormatFloat('#,##0', AHodnota) + ' ks';
+end;
+
+procedure TfrmVylepsovani.ZmenaParametru(Sender: TObject);
+begin
+  if Sender = cmbTypPredmetu then
+    NaplnRozsahStupnu;
+  VypocitejAZobraz;
+end;
+
+procedure TfrmVylepsovani.btnVypocitatClick(Sender: TObject);
+begin
+  VypocitejAZobraz;
+end;
+
+procedure TfrmVylepsovani.btnKopirovatClick(Sender: TObject);
+var
+  SL: TStringList;
+  Item: TListItem;
+begin
+  SL := TStringList.Create;
+  try
+    SL.Add(Format('%s | %s -> %s', [
+      cmbTypPredmetu.Text,
+      cmbStupenOd.Text,
+      cmbStupenDo.Text
+    ]));
+
+    for Item in lvVysledek.Items do
+      if Item.SubItems.Count > 0 then
+        SL.Add(Format('- %s: %s', [Item.Caption, Item.SubItems[0]]));
+
+    Clipboard.AsText := SL.Text;
+  finally
+    SL.Free;
+  end;
+end;
+
+procedure TfrmVylepsovani.VypocitejAZobraz;
+var
+  IdxTyp, StupenOd, StupenDo, Krok, i: Integer;
+  Soucty: TDictionary<string, Int64>;
+  Poradi: TList<string>;
+  Urov: TUrovenVylepseni;
+  Sur: TSurovinaItem;
+  NazevSur: string;
+  Item: TListItem;
+begin
+  IdxTyp := cmbTypPredmetu.ItemIndex;
+  if (IdxTyp < 0) or (IdxTyp > High(FData)) then
+    Exit;
+
+  if (cmbStupenOd.ItemIndex < 0) or (cmbStupenDo.ItemIndex < 0) then
+    Exit;
+
+  StupenOd := Integer(cmbStupenOd.Items.Objects[cmbStupenOd.ItemIndex]);
+  StupenDo := Integer(cmbStupenDo.Items.Objects[cmbStupenDo.ItemIndex]);
+
+  lvVysledek.Items.BeginUpdate;
+  try
+    lvVysledek.Items.Clear;
+
+    if StupenDo <= StupenOd then
+    begin
+      Item := lvVysledek.Items.Add;
+      Item.ImageIndex := -1;
+      Item.Caption := 'Stupeò "Do" musí být vyšší než "Od"';
+      Exit;
+    end;
+
+    Soucty := TDictionary<string, Int64>.Create;
+    Poradi := TList<string>.Create;
+    try
+      for Krok := StupenOd + 1 to StupenDo do
+      begin
+        for i := 0 to High(FData[IdxTyp].Urovne) do
+        begin
+          Urov := FData[IdxTyp].Urovne[i];
+          if Urov.StupenPoVylepseni = Krok then
+          begin
+            for Sur in Urov.Suroviny do
+            begin
+              if Soucty.ContainsKey(Sur.Nazev) then
+                Soucty[Sur.Nazev] := Soucty[Sur.Nazev] + Sur.PocetNaKrok
+              else
+              begin
+                Soucty.Add(Sur.Nazev, Sur.PocetNaKrok);
+                Poradi.Add(Sur.Nazev);
+              end;
+            end;
+            Break;
+          end;
+        end;
+      end;
+
+      if Poradi.Count = 0 then
+      begin
+        Item := lvVysledek.Items.Add;
+        Item.ImageIndex := -1;
+        Item.Caption := 'Pro zvolený rozsah nejsou definované suroviny';
+        Exit;
+      end;
+
+      for NazevSur in Poradi do
+      begin
+        Item := lvVysledek.Items.Add;
+        Item.ImageIndex := IndexIkonkyProSurovinu(NazevSur);
+        Item.Caption := NazevSur;
+        Item.SubItems.Add(FormatujMnozstvi(NazevSur, Soucty[NazevSur]));
+      end;
+    finally
+      Poradi.Free;
+      Soucty.Free;
+    end;
+  finally
+    lvVysledek.Items.EndUpdate;
+  end;
+end;
+
+end.

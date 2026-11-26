@@ -7,7 +7,8 @@ uses
   tEventy in 'tEventy.pas' {FormEventy},
   tHerbareni in 'tHerbareni.pas' {SecondaryForm},
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  tVylepsovani in 'tVylepsovani.pas' {frmVylepsovani};
 
 {$R *.res}
 
@@ -20,5 +21,7 @@ begin
   Application.CreateForm(TForm1, Form1);
   Application.CreateForm(TFormEventy, FormEventy);
   Application.CreateForm(TSecondaryForm, SecondaryForm);
+  Application.CreateForm(TfrmVylepsovani, frmVylepsovani);
+  Application.CreateForm(TfrmVylepsovani, frmVylepsovani);
   Application.Run;
 end.

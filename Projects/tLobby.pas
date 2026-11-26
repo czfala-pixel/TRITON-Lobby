@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, Winapi.ShellAPI, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.UITypes,
   tDochazka, tHerbareni, tEventy, Vcl.ExtCtrls, System.JSON, System.Net.HttpClient,
-  System.IOUtils, System.Net.URLClient, System.Hash,
+  System.IOUtils, System.Net.URLClient, System.Hash, tVylepsovani,
   System.Net.HttpClientComponent, Vcl.ComCtrls;
 
 type
@@ -20,12 +20,14 @@ type
     pbUpdate: TProgressBar;
     btnHelper: TButton;
     btnOsvicenstvi: TButton;
+    btnVylepsovani: TButton;
     procedure btnDochazkaClick(Sender: TObject);
     procedure btnHerbareniClick(Sender: TObject);
     procedure btnEventyClick(Sender: TObject);
     procedure btnAktualizovatClick(Sender: TObject);
     procedure btnHelperClick(Sender: TObject);
     procedure btnOsvicenstviClick(Sender: TObject);
+    procedure btnVylepsovaniClick(Sender: TObject);
   private
     procedure OpenUrl(const AUrl: string);
   public
@@ -285,6 +287,12 @@ end;
 procedure TLobbyForm.btnOsvicenstviClick(Sender: TObject);
 begin
   OpenUrl('https://docs.google.com/document/d/1afPbFuS__nOqGtFhC083u6rACrxQP9raEN7OBCRNXk4/edit?tab=t.0');
+end;
+
+procedure TLobbyForm.btnVylepsovaniClick(Sender: TObject);
+begin
+  frmVylepsovani.Show;
+  frmVylepsovani.BringToFront;
 end;
 
 end.

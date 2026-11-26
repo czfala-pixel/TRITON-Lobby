@@ -1,0 +1,24 @@
+program Lobby;
+
+uses
+  Vcl.Forms,
+  tLobby in 'tLobby.pas' {LobbyForm},
+  tDochazka in 'tDochazka.pas' {Form1},
+  tEventy in 'tEventy.pas' {FormEventy},
+  tHerbareni in 'tHerbareni.pas' {SecondaryForm},
+  Vcl.Themes,
+  Vcl.Styles;
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.Title := 'Lobby';
+  TStyleManager.TrySetStyle('Aqua Light Slate');
+  Application.CreateForm(TLobbyForm, LobbyForm);
+  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TFormEventy, FormEventy);
+  Application.CreateForm(TSecondaryForm, SecondaryForm);
+  Application.Run;
+end.
